@@ -4,8 +4,98 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7649f3a83e9a0e049081959fb9401043",
+    "content-hash": "fadc537517a3bd6a3f848f0ab1f586d9",
     "packages": [
+        {
+            "name": "bentools/iterable-functions",
+            "version": "1.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bpolaszek/php-iterable-functions.git",
+                "reference": "82996c6c0e794edf212cde4bb5aff0e1a2b8498d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bpolaszek/php-iterable-functions/zipball/82996c6c0e794edf212cde4bb5aff0e1a2b8498d",
+                "reference": "82996c6c0e794edf212cde4bb5aff0e1a2b8498d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.0|^5.0|^6.0|^7.0",
+                "squizlabs/php_codesniffer": "^2.0|^3.4",
+                "symfony/var-dumper": "@stable"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/iterable-functions.php"
+                ],
+                "psr-4": {
+                    "BenTools\\IterableFunctions\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Provides functions for iterable variables: is_iterable(), iterable_to_array()",
+            "support": {
+                "issues": "https://github.com/bpolaszek/php-iterable-functions/issues",
+                "source": "https://github.com/bpolaszek/php-iterable-functions/tree/1.4"
+            },
+            "time": "2020-05-01T07:48:02+00:00"
+        },
+        {
+            "name": "hguenot/phpstream",
+            "version": "V3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hguenot/phpstream.git",
+                "reference": "50828489b2823e9dba75ff4031de7664215b0bb6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hguenot/phpstream/zipball/50828489b2823e9dba75ff4031de7664215b0bb6",
+                "reference": "50828489b2823e9dba75ff4031de7664215b0bb6",
+                "shasum": ""
+            },
+            "require": {
+                "bentools/iterable-functions": "~1.3",
+                "php": ">=8.0.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": ">=9"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "phpstream\\": "src/phpstream"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Hervé Guenot",
+                    "email": "herve@guenot.info"
+                }
+            ],
+            "description": "PHPStream claims to be a partial PHP port of the Java Stream API.",
+            "keywords": [
+                "java stream api",
+                "stream"
+            ],
+            "support": {
+                "issues": "https://github.com/hguenot/phpstream/issues",
+                "source": "https://github.com/hguenot/phpstream/tree/V3.0.0"
+            },
+            "time": "2021-03-07T06:54:41+00:00"
+        },
         {
             "name": "psr/cache",
             "version": "3.0.0",

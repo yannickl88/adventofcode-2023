@@ -17,6 +17,7 @@
         "symfony/config": "^7.0",
         "symfony/yaml": "^7.0",
         "symfony/framework-bundle": "^7.0",
-        "symfony/dotenv": "^7.0"
+        "symfony/dotenv": "^7.0",
+        "hguenot/phpstream": "^3.0"
     }
 }

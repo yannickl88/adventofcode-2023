@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use phpstream\Stream;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -31,14 +32,10 @@ class Day1 extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $total = array_reduce(file($input->getArgument('input')), function (int $carry, string $line) {
-            $digits = $this->extractDigits($line);
-            $number = (int) ($digits[0] . $digits[count($digits) - 1]);
-
-            echo sprintf("%s, %s => %s\n", trim($line), json_encode($digits), $number);
-
-            return $carry + $number;
-        }, 0);
+        $total = Stream::of(file($input->getArgument('input')))
+            ->map(fn (string $line) => $this->extractDigits($line))
+            ->map(fn (array $digits) => (int) ($digits[0] . $digits[count($digits) - 1]))
+            ->reduce(fn (int $carry, int $number) => $carry + $number, 0);
 
         var_dump($total);
 
