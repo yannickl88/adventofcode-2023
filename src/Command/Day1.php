@@ -10,7 +10,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-#[AsCommand(name: 'app:day1')]
+#[AsCommand(name: 'day1')]
 class Day1 extends Command
 {
     private array $number_mapping = [
