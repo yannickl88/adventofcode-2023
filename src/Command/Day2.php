@@ -22,7 +22,7 @@ class Day2 extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        return $this->part1($input, $output);
+        return $this->part2($input, $output);
     }
 
     protected function part1(InputInterface $input, OutputInterface $output): int
@@ -38,8 +38,20 @@ class Day2 extends Command
 
                 return true;
             })
-            ->peek(fn ($game) => dump($game))
             ->reduce(fn ($carry, $current) => $carry + $current[0], 0);
+
+        dump($total);
+
+        return self::SUCCESS;
+    }
+
+    protected function part2(InputInterface $input, OutputInterface $output): int
+    {
+        $total = Stream::of(file($input->getArgument('input')))
+            ->map(fn ($line) => $this->parseGame(trim($line)))
+            ->map(fn ($game) => $this->findMax($game[0], Stream::of($game[1])))
+            ->map(fn ($game) => $game[1]['r'] * $game[1]['g'] * $game[1]['b'])
+            ->reduce(fn ($carry, $power) => $carry + $power);
 
         dump($total);
 
@@ -67,5 +79,14 @@ class Day2 extends Command
 
             return $result;
         }, explode('; ', $matches[2]))];
+    }
+
+    private function findMax(int $game, Stream $sets): array
+    {
+        return [$game, $sets->reduce(fn ($carry, $set) => [
+            'r' => max($carry['r'], $set['r']),
+            'g' => max($carry['g'], $set['g']),
+            'b' => max($carry['b'], $set['b'])
+        ], ['r' => 0, 'g' => 0, 'b' => 0])];
     }
 }
