@@ -20,7 +20,7 @@ class Day3 extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        return $this->part1($input, $output);
+        return $this->part2($input, $output);
     }
 
     protected function part1(InputInterface $input, OutputInterface $output): int
@@ -35,7 +35,7 @@ class Day3 extends Command
             }
 
             foreach ($matches[0] as [$number, $x]) {
-                if ($this->hasAdjacentSymbols($x, $y, strlen($number), $symbols)) {
+                if (count($this->getAdjacentSymbols($x, $y, strlen($number), $symbols)) > 0) {
                     $numbers[] = (int) $number;
                 }
             }
@@ -48,6 +48,27 @@ class Day3 extends Command
 
     protected function part2(InputInterface $input, OutputInterface $output): int
     {
+        $grid = Stream::of(file($input->getArgument('input')))->map('trim')->toArray();
+        $symbols = $this->extractSymbols($grid);
+        $adjacent_numbers = array_combine(array_keys($symbols), array_pad([], count($symbols), []));
+        $numbers = [];
+
+        foreach ($grid as $y => $line) {
+            if (false === preg_match_all('/\d+/', $line, $matches, PREG_OFFSET_CAPTURE)) {
+                continue;
+            }
+
+            foreach ($matches[0] as [$number, $x]) {
+                foreach ($this->getAdjacentSymbols($x, $y, strlen($number), $symbols) as $name => $symbol) {
+                    $adjacent_numbers[$name][] = (int) $number;
+                }
+            }
+        }
+
+        $adjacent_numbers = array_filter($adjacent_numbers, fn(array $numbers) => count($numbers) === 2);
+        $ratios = array_map(fn(array $numbers) => $numbers[0] * $numbers[1], $adjacent_numbers);
+
+        dump(array_sum($ratios));
 
         return self::SUCCESS;
     }
@@ -58,28 +79,32 @@ class Day3 extends Command
 
         foreach ($grid as $y => $row) {
             for ($x = 0, $n = strlen($row); $x < $n; $x++) {
-                if (1 !== preg_match('/[^.0-9]/', substr($row, $x, 1))) {
+                $symbol = substr($row, $x, 1);
+                if (1 !== preg_match('/[^.0-9]/', $symbol)) {
                     continue;
                 }
 
-                $symbols[] = [$x, $y];
+                $symbols[sprintf('%d;%d', $x, $y)] = [$x, $y, $symbol];
             }
         }
 
         return $symbols;
     }
 
-    private function hasAdjacentSymbols(int $sx, int $y, int $length, array $symbols): bool
+    private function getAdjacentSymbols(int $sx, int $y, int $length, array $symbols): array
     {
+        $locations = [];
         for ($x = $sx - 1, $n = $sx + $length; $x <= $n; $x++) {
-            if (in_array([$x, $y - 1], $symbols, true)
-                || in_array([$x, $y], $symbols, true)
-                || in_array([$x, $y + 1], $symbols, true)
-            ) {
-                return true;
-            }
+            array_push(
+                $locations,
+                [$x, $y - 1],
+                [$x, $y],
+                [$x, $y + 1],
+            );
         }
 
-        return false;
+        return array_filter($symbols, function (array $symbol) use ($locations) {
+            return in_array([$symbol[0], $symbol[1]], $locations, true);
+        });
     }
 }
