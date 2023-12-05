@@ -66,9 +66,4 @@ class Day4 extends Command
 
         return self::SUCCESS;
     }
-
-    private function calculateWinsFor(mixed $card, int $i, array $cards): int
-    {
-
-    }
 }

@@ -20,7 +20,7 @@ class DayTemplate extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        return $this->part2($input, $output);
+        return $this->part1($input, $output);
     }
 
     protected function part1(InputInterface $input, OutputInterface $output): int
