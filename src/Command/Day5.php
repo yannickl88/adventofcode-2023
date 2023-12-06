@@ -87,6 +87,8 @@ class Day5 extends Command
         );
         $type = null;
 
+        usort($seeds, fn ($a, $b) => $a[0] <=> $b[0]);
+
         for ($i = 0; $i < count($lines); $i++) {
             $line = $lines[$i];
 
@@ -95,30 +97,35 @@ class Day5 extends Command
                 $type = explode(' ', $lines[$i])[0];
             } else {
                 $input = array_map('intval', explode(' ', trim($line)));
-                $maps[$type]->addRange($input[1], $input[0], $input[2]);
+                $maps[$type]->addRange($input[0], $input[1], $input[2]);
             }
         }
 
-        dump($maps['soil-to-fertilizer']->merge($maps['seed-to-soil']));
+        $get_seed = fn(int $location) =>
+        $maps['seed-to-soil']
+            ->get($maps['soil-to-fertilizer']
+                ->get($maps['fertilizer-to-water']
+                    ->get($maps['water-to-light']
+                        ->get($maps['light-to-temperature']
+                            ->get($maps['temperature-to-humidity']
+                                ->get($maps['humidity-to-location']->get($location)))))));
 
-        $total = PHP_INT_MAX;
+        $location = 0;
+        while (true) {
+            $seed = $get_seed($location);
 
-        foreach ($seeds as [$start, $size]) {
-            for ($i = $start; $i < $start + $size; $i++) {
-//                $location = $maps['humidity-to-location']
-//                    ->get($maps['temperature-to-humidity']
-//                        ->get($maps['light-to-temperature']
-//                            ->get($maps['water-to-light']
-//                                ->get($maps['fertilizer-to-water']
-//                                    ->get($maps['soil-to-fertilizer']
-//                                        ->get($maps['seed-to-soil']->get($i)))))));
-//
-                $total = min($total, $i);
+            foreach ($seeds as [$seed_from, $count]) {
+                if ($seed_from <= $seed && $seed < $seed_from + $count) {
+                    dump($location);
+                    break 2;
+                } else if ($seed_from > $seed) {
+                    break;
+                }
 
             }
-        }
 
-//        dump($total);
+            $location++;
+        }
 
         return self::SUCCESS;
     }
