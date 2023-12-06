@@ -21,7 +21,7 @@ class Day5 extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        return $this->part1($input, $output);
+        return $this->part2($input, $output);
     }
 
     protected function part1(InputInterface $input, OutputInterface $output): int
@@ -49,7 +49,7 @@ class Day5 extends Command
                 $type = explode(' ', $lines[$i])[0];
             } else {
                 $input = array_map('intval', explode(' ', trim($line)));
-                $maps[$type]->addRange($input[0], $input[1], $input[2]);
+                $maps[$type]->addRange($input[1], $input[0], $input[2]);
             }
         }
 
@@ -71,6 +71,54 @@ class Day5 extends Command
 
     protected function part2(InputInterface $input, OutputInterface $output): int
     {
+        $lines = file($input->getArgument('input'));
+        $maps = [
+            'seed-to-soil' => new Day5Map(),
+            'soil-to-fertilizer' => new Day5Map(),
+            'fertilizer-to-water' => new Day5Map(),
+            'water-to-light' => new Day5Map(),
+            'light-to-temperature' => new Day5Map(),
+            'temperature-to-humidity' => new Day5Map(),
+            'humidity-to-location' => new Day5Map(),
+        ];
+        $seeds = array_chunk(
+            array_map('intval', explode(' ', substr(array_shift($lines), 7))),
+            2
+        );
+        $type = null;
+
+        for ($i = 0; $i < count($lines); $i++) {
+            $line = $lines[$i];
+
+            if (empty(trim($line))) {
+                $i++;
+                $type = explode(' ', $lines[$i])[0];
+            } else {
+                $input = array_map('intval', explode(' ', trim($line)));
+                $maps[$type]->addRange($input[1], $input[0], $input[2]);
+            }
+        }
+
+        dump($maps['soil-to-fertilizer']->merge($maps['seed-to-soil']));
+
+        $total = PHP_INT_MAX;
+
+        foreach ($seeds as [$start, $size]) {
+            for ($i = $start; $i < $start + $size; $i++) {
+//                $location = $maps['humidity-to-location']
+//                    ->get($maps['temperature-to-humidity']
+//                        ->get($maps['light-to-temperature']
+//                            ->get($maps['water-to-light']
+//                                ->get($maps['fertilizer-to-water']
+//                                    ->get($maps['soil-to-fertilizer']
+//                                        ->get($maps['seed-to-soil']->get($i)))))));
+//
+                $total = min($total, $i);
+
+            }
+        }
+
+//        dump($total);
 
         return self::SUCCESS;
     }
